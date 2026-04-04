@@ -1,5 +1,6 @@
 import User from '../models/User.js';
 import bcrypt from 'bcrypt';
+import createUserToken from '../utils/create-user-token.js';
 
 export default class UserController {
     static async register(req, res) {
@@ -12,6 +13,10 @@ export default class UserController {
 
         if (!email) {
             return res.status(422).json({ message: 'O e-mail é obrigatório!' });
+        }
+
+        if (!email.includes('@')) {
+            return res.status(422).json({ message: 'E-mail inválido!' });
         }
 
         if (!phone) {
@@ -35,6 +40,12 @@ export default class UserController {
             return res.status(422).json({ message: 'As senhas não conferem!' });
         }
 
+        if (password.length < 6) {
+            return res.status(422).json({
+                message: 'A senha deve ter no mínimo 6 caracteres!',
+            });
+        }
+
         // Email normalizado
         const emailNormalized = email.toLowerCase();
 
@@ -50,19 +61,32 @@ export default class UserController {
         const passwordHash = await bcrypt.hash(password, salt);
 
         // Criar Usuário
-        const user = new User({
-            name,
-            email: emailNormalized,
-            phone,
-            password: passwordHash,
-        });
-
         try {
-            await user.save();
-            res.status(201).json({ message: 'Usuário criado com sucesso!' });
+            const user = await User.create({
+                name,
+                email: emailNormalized,
+                phone,
+                password: passwordHash,
+            });
+
+            const token = createUserToken(user);
+
+            const response = {
+                message: 'Usuário criado e autenticado!',
+                token,
+                user: {
+                    id: user._id,
+                    name,
+                    email,
+                },
+            };
+            return res.status(201).json(response);
         } catch (error) {
-            console.log(error);
-            res.status(500).json({ message: 'Erro interno do servidor!' });
+            console.error(error);
+
+            return res.status(500).json({
+                message: 'Erro interno do servidor!',
+            });
         }
     }
 }
