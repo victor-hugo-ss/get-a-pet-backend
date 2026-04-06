@@ -1,6 +1,10 @@
 import User from '../models/User.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+
+// Utils
 import createUserToken from '../utils/create-user-token.js';
+import getToken from '../utils/get-token.js';
 
 export default class UserController {
     static async register(req, res) {
@@ -88,5 +92,68 @@ export default class UserController {
                 message: 'Erro interno do servidor!',
             });
         }
+    }
+
+    static async login(req, res) {
+        const { email, password } = req.body;
+
+        if (!email) {
+            return res.status(422).json({ message: 'O e-mail é obrigatório!' });
+        }
+
+        if (!email.includes('@')) {
+            return res.status(422).json({ message: 'E-mail inválido!' });
+        }
+
+        if (!password) {
+            return res.status(422).json({ message: 'A senha é obrigatória!' });
+        }
+
+        // Email normalizado
+        const emailNormalized = email.toLowerCase();
+
+        // Verifica se usuário já existe
+        const user = await User.findOne({ email: emailNormalized });
+
+        if (!user) {
+            return res
+                .status(401)
+                .json({ message: 'Não há usuário cadastrado com esse e-mail' });
+        }
+
+        // checar a senha
+        const checkPassword = await bcrypt.compare(password, user.password);
+
+        if (!checkPassword) {
+            return res.status(401).json({
+                message: 'Senha inválida!',
+            });
+        }
+
+        const token = createUserToken(user);
+        return res.status(200).json({
+            message: 'Login realizado com sucesso!',
+            token,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+            },
+        });
+    }
+
+    static async checkUser(req, res) {
+        let currentUser;
+
+        if (req.headers.authorization) {
+            const token = getToken(req);
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            currentUser = await User.findById(decoded.id);
+            currentUser.password = undefined;
+        } else {
+            currentUser = null;
+        }
+
+        res.status(200).send(currentUser);
     }
 }
