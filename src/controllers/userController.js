@@ -154,4 +154,17 @@ export default class UserController {
             message: 'Erro ao buscar usuário!',
         });
     }
+
+    static async getUserById(req, res) {
+        const id = req.params.id;
+
+        const user = await User.findById(id).select('-password');
+        if (!user) {
+            return res.status(422).json({
+                message: 'Usuário não encontrado!',
+            });
+        }
+
+        res.status(200).json({ user });
+    }
 }
