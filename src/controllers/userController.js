@@ -167,4 +167,10 @@ export default class UserController {
 
         res.status(200).json({ user });
     }
+
+    static async editUser(req, res) {
+        return res.status(200).json({
+            message: 'Deu certo!',
+        });
+    }
 }
