@@ -143,17 +143,15 @@ export default class UserController {
     }
 
     static async checkUser(req, res) {
-        let currentUser;
-
-        if (req.headers.authorization) {
-            const token = getToken(req);
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            currentUser = await User.findById(decoded.id);
-            currentUser.password = undefined;
-        } else {
-            currentUser = null;
+        try {
+            const user = await User.findById(req.user.id).select('-password');
+            return res.status(200).json(user);
+        } catch (error) {
+            console.error(error);
         }
 
-        res.status(200).send(currentUser);
+        return res.status(500).json({
+            message: 'Erro ao buscar usuário!',
+        });
     }
 }
