@@ -175,7 +175,10 @@ export default class UserController {
 
         const { name, email, phone, password, confirmpassword } = req.body;
 
-        let image = '';
+        if (req.file) {
+            user.image = req.file.filename;
+        }
+
         // validações
 
         if (!name) {
@@ -210,18 +213,18 @@ export default class UserController {
 
         user.phone = phone;
 
-        if (password && password.length < 6) {
-            return res.status(422).json({
-                message: 'A senha deve ter no mínimo 6 caracteres!',
-            });
-        }
+        if (password) {
+            if (password && password.length < 6) {
+                return res.status(422).json({
+                    message: 'A senha deve ter no mínimo 6 caracteres!',
+                });
+            }
 
-        if (password !== confirmpassword) {
-            return res.status(422).json({ message: 'As senhas não conferem!' });
-        } else if (password === confirmpassword && password !== null) {
-            const salt = await bcrypt.genSalt(12);
-            const passwordHash = await bcrypt.hash(password, salt);
-            user.password = passwordHash;
+            if (password !== confirmpassword) {
+                return res.status(422).json({
+                    message: 'As senhas não conferem!',
+                });
+            }
         }
 
         try {
@@ -229,6 +232,7 @@ export default class UserController {
                 name,
                 email,
                 phone,
+                image: user.image,
             };
 
             if (password) {
