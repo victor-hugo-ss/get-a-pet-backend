@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 
 // Utils
 import createUserToken from '../utils/create-user-token.js';
+import getUserByToken from '../utils/get-user-by-token.js';
 import getToken from '../utils/get-token.js';
 
 export default class UserController {
@@ -169,8 +170,85 @@ export default class UserController {
     }
 
     static async editUser(req, res) {
-        return res.status(200).json({
-            message: 'Deu certo!',
-        });
+        const token = getToken(req);
+        const user = await getUserByToken(token);
+
+        const { name, email, phone, password, confirmpassword } = req.body;
+
+        let image = '';
+        // validações
+
+        if (!name) {
+            return res.status(422).json({ message: 'O nome é obrigatório!' });
+        }
+
+        user.name = name;
+
+        if (!email) {
+            return res.status(422).json({ message: 'O e-mail é obrigatório!' });
+        }
+
+        if (!email.includes('@')) {
+            return res.status(422).json({ message: 'E-mail inválido!' });
+        }
+
+        const userExists = await User.findOne({ email });
+
+        if (user.email !== email && userExists) {
+            return res.status(422).json({
+                message: 'Por favor, utilize outro e-mail!',
+            });
+        }
+
+        user.email = email;
+
+        if (!phone) {
+            return res
+                .status(422)
+                .json({ message: 'O telefone é obrigatório!' });
+        }
+
+        user.phone = phone;
+
+        if (password && password.length < 6) {
+            return res.status(422).json({
+                message: 'A senha deve ter no mínimo 6 caracteres!',
+            });
+        }
+
+        if (password !== confirmpassword) {
+            return res.status(422).json({ message: 'As senhas não conferem!' });
+        } else if (password === confirmpassword && password !== null) {
+            const salt = await bcrypt.genSalt(12);
+            const passwordHash = await bcrypt.hash(password, salt);
+            user.password = passwordHash;
+        }
+
+        try {
+            const updatedData = {
+                name,
+                email,
+                phone,
+            };
+
+            if (password) {
+                const salt = await bcrypt.genSalt(12);
+                const passwordHash = await bcrypt.hash(password, salt);
+                updatedData.password = passwordHash;
+            }
+
+            await User.findOneAndUpdate(user._id, updatedData, {
+                returnDocument: 'after',
+                runValidators: true,
+            });
+
+            return res.status(200).json({
+                message: 'Usuário atualizado com sucesso!',
+            });
+        } catch (error) {
+            return res.status(500).json({
+                message: error,
+            });
+        }
     }
 }
