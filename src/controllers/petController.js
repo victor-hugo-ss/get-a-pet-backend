@@ -9,8 +9,6 @@ export default class petController {
 
         const available = true;
 
-        // Upload de imagens
-
         // Validações
         if (!name) {
             return res.status(422).json({ message: 'O nome é obrigatório!' });
@@ -28,6 +26,13 @@ export default class petController {
             return res.status(422).json({ message: 'A cor é obrigatória!' });
         }
 
+        // Upload de imagens
+        if (!req.files || req.files.length === 0) {
+            return res.status(422).json({ message: 'A imagem é obrigatória!' });
+        }
+
+        const images = req.files.map((image) => image.filename);
+
         // Dono do pet
         const token = getToken(req);
         const user = await getUserByToken(token);
@@ -39,7 +44,7 @@ export default class petController {
             weight,
             color,
             available,
-            images: [],
+            images,
             user: {
                 _id: user._id,
                 name: user.name,

@@ -6,7 +6,13 @@ import petController from '../controllers/petController.js';
 
 // Middlewares
 import checkToken from '../middlewares/checkToken.js';
+import uploadImage from '../middlewares/uploadImage.js';
 
-router.post('/create', checkToken, petController.create);
+router.post(
+    '/create',
+    checkToken,
+    uploadImage('pets').array('images'),
+    petController.create
+);
 
 export default router;
