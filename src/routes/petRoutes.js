@@ -4,6 +4,9 @@ const router = Router();
 // Controller
 import petController from '../controllers/petController.js';
 
-router.post('/create', petController.create);
+// Middlewares
+import checkToken from '../middlewares/checkToken.js';
+
+router.post('/create', checkToken, petController.create);
 
 export default router;
