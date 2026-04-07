@@ -175,10 +175,6 @@ export default class UserController {
 
         const { name, email, phone, password, confirmpassword } = req.body;
 
-        if (req.file) {
-            user.image = req.file.filename;
-        }
-
         // validações
 
         if (!name) {
@@ -232,8 +228,11 @@ export default class UserController {
                 name,
                 email,
                 phone,
-                image: user.image,
             };
+
+            if (req.file) {
+                updatedData.image = req.file.filename;
+            }
 
             if (password) {
                 const salt = await bcrypt.genSalt(12);
