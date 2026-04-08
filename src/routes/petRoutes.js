@@ -17,5 +17,6 @@ router.post(
 router.get('/', petController.getAll);
 router.get('/mypets', checkToken, petController.getAllUserPets);
 router.get('/myadoptions', checkToken, petController.getAllUserAdoptions);
+router.get('/:id', petController.getPetById);
 
 export default router;

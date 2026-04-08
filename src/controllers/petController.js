@@ -1,6 +1,8 @@
 import Pet from '../models/Pet.js';
 import getToken from '../utils/get-token.js';
 import getUserByToken from '../utils/get-user-by-token.js';
+import { Types } from 'mongoose';
+const { ObjectId } = Types;
 
 export default class petController {
     // Criar um pet
@@ -91,5 +93,22 @@ export default class petController {
         );
 
         res.status(200).json({ pets });
+    }
+
+    static async getPetById(req, res) {
+        const id = req.params.id;
+
+        if (!ObjectId.isValid(id)) {
+            return res.status(422).json({ message: 'ID inválido!' });
+        }
+
+        // Checar se o pet existe
+        const pet = await Pet.findOne({ _id: id });
+
+        if (!pet) {
+            return res.status(404).json({ message: 'Pet não encontrado!' });
+        }
+
+        res.status(200).json({ pet });
     }
 }
