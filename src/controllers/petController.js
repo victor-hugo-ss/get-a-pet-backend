@@ -63,4 +63,9 @@ export default class petController {
             res.status(500).json({ message: error });
         }
     }
+
+    static async getAll(req, res) {
+        const pets = await Pet.find().sort('-createdAt');
+        res.status(200).json({ pets });
+    }
 }
