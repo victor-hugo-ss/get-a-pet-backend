@@ -98,6 +98,7 @@ export default class petController {
     static async getPetById(req, res) {
         const id = req.params.id;
 
+        // Checa se o ID é válido
         if (!ObjectId.isValid(id)) {
             return res.status(422).json({ message: 'ID inválido!' });
         }
@@ -110,5 +111,36 @@ export default class petController {
         }
 
         res.status(200).json({ pet });
+    }
+
+    static async removePetById(req, res) {
+        const id = req.params.id;
+
+        // Checa se o ID é válido
+        if (!ObjectId.isValid(id)) {
+            return res.status(422).json({ message: 'ID inválido!' });
+        }
+
+        // Checar se o pet existe
+        const pet = await Pet.findOne({ _id: id });
+
+        if (!pet) {
+            return res.status(404).json({ message: 'Pet não encontrado!' });
+        }
+
+        // Checa se o pet é do usuário logado
+        const token = getToken(req);
+        const user = await getUserByToken(token);
+
+        if (pet.user._id.toString() !== user._id.toString()) {
+            return res.status(422).json({
+                message:
+                    'Houve um problema em processar a sua solicitação, tente novamente mais tarde!',
+            });
+        }
+
+        await Pet.findOneAndDelete(id);
+
+        res.status(200).json({ message: 'Pet removido com sucesso!' });
     }
 }
