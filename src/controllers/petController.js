@@ -143,4 +143,47 @@ export default class petController {
 
         res.status(200).json({ message: 'Pet removido com sucesso!' });
     }
+
+    static async updatePet(req, res) {
+        const { name, age, weight, color, available } = req.body;
+        const id = req.pet._id;
+
+        const updatedData = {};
+
+        // Validações
+        if (!name) {
+            return res.status(422).json({ message: 'O nome é obrigatório!' });
+        } else {
+            updatedData.name = name;
+        }
+
+        if (!age) {
+            return res.status(422).json({ message: 'A idade é obrigatória!' });
+        } else {
+            updatedData.age = age;
+        }
+
+        if (!weight) {
+            return res.status(422).json({ message: 'O peso é obrigatório!' });
+        } else {
+            updatedData.weight = weight;
+        }
+
+        if (!color) {
+            return res.status(422).json({ message: 'A cor é obrigatória!' });
+        } else {
+            updatedData.color = color;
+        }
+
+        // Upload de imagens
+        if (!req.files || req.files.length === 0) {
+            return res.status(422).json({ message: 'A imagem é obrigatória!' });
+        } else {
+            const images = req.files.map((image) => image.filename);
+            updatedData.images = images;
+        }
+
+        await Pet.findByIdAndUpdate(id, updatedData);
+        res.status(200).json({ message: 'Pet atualizado com sucesso!' });
+    }
 }
