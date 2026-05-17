@@ -22,39 +22,39 @@ API REST para uma plataforma de adoção de animais. Permite que usuários cadas
 ## 📁 Estrutura do Projeto
 
 ```
-├── 📁 get-a-pet-backend
-│   ├── 📁 public
-│   │   └── 📁 images
-│   │       ├── 📁 pets
-│   │       └── 📁 users
-│   ├── 📁 src
-│   │   ├── 📁 config
-│   │   │   └── 📄 db.js
-│   │   ├── 📁 controllers
-│   │   │   ├── 📄 petController.js
-│   │   │   └── 📄 userController.js
-│   │   ├── 📁 middlewares
-│   │   │   ├── 📄 checkToken.js
-│   │   │   ├── 📄 uploadImage.js
-│   │   │   └── 📄 verifyPetOwner.js
-│   │   ├── 📁 models
-│   │   │   ├── 📄 Pet.js
-│   │   │   └── 📄 User.js
-│   │   ├── 📁 routes
-│   │   │   ├── 📄 petRoutes.js
-│   │   │   └── 📄 userRoutes.js
-│   │   ├── 📁 utils
-│   │   │   ├── 📄 create-user-token.js
-│   │   │   ├── 📄 get-token.js
-│   │   │   └── 📄 get-user-by-token.js
-│   │   ├── 📄 app.js
-│   │   └── 📄 index.js
-│   ├── ⚙️ .gitignore
-│   ├── ⚙️ .prettierrc
-│   ├── 📝 README.md
-│   ├── ⚙️ package-lock.json
-│   └── ⚙️ package.json
-└── ⚙️ .env.example
+└── 📁 get-a-pet-backend
+    ├── 📁 public
+    │   └── 📁 images
+    │       ├── 📁 pets
+    │       └── 📁 users
+    ├── 📁 src
+    │   ├── 📁 config
+    │   │   └── 📄 db.js
+    │   ├── 📁 controllers
+    │   │   ├── 📄 petController.js
+    │   │   └── 📄 userController.js
+    │   ├── 📁 middlewares
+    │   │   ├── 📄 checkToken.js
+    │   │   ├── 📄 uploadImage.js
+    │   │   └── 📄 verifyPetOwner.js
+    │   ├── 📁 models
+    │   │   ├── 📄 Pet.js
+    │   │   └── 📄 User.js
+    │   ├── 📁 routes
+    │   │   ├── 📄 petRoutes.js
+    │   │   └── 📄 userRoutes.js
+    │   ├── 📁 utils
+    │   │   ├── 📄 create-user-token.js
+    │   │   ├── 📄 get-token.js
+    │   │   └── 📄 get-user-by-token.js
+    │   ├── 📄 app.js
+    │   └── 📄 index.js
+    ├── ⚙️ .env.example
+    ├── ⚙️ .gitignore
+    ├── ⚙️ .prettierrc
+    ├── 📝 README.md
+    ├── ⚙️ package-lock.json
+    └── ⚙️ package.json
 ```
 
 ---
