@@ -116,15 +116,17 @@ FRONTEND_URL=http://localhost:3000
 
 ### 🐶 Pets — `/pets`
 
-| Método   | Rota                | Descrição                          | Auth  | Upload                  |
-| -------- | ------------------- | ---------------------------------- | ----- | ----------------------- |
-| `POST`   | `/pets/create`      | Cadastra um novo pet               | ✅    | 🖼️ `images` (múltiplas) |
-| `GET`    | `/pets`             | Lista todos os pets disponíveis    | ❌    | ❌                      |
-| `GET`    | `/pets/mypets`      | Lista os pets do usuário logado    | ✅    | ❌                      |
-| `GET`    | `/pets/myadoptions` | Lista as adoções do usuário logado | ✅    | ❌                      |
-| `GET`    | `/pets/:id`         | Busca um pet pelo ID               | ❌    | ❌                      |
-| `DELETE` | `/pets/:id`         | Remove um pet                      | ✅ 🔒 | ❌                      |
-| `PATCH`  | `/pets/:id`         | Atualiza dados de um pet           | ✅ 🔒 | 🖼️ `images` (múltiplas) |
+| Método   | Rota                 | Descrição                          | Auth  | Upload                  |
+| -------- | -------------------- | ---------------------------------- | ----- | ----------------------- |
+| `POST`   | `/pets/create`       | Cadastra um novo pet               | ✅    | 🖼️ `images` (múltiplas) |
+| `GET`    | `/pets`              | Lista todos os pets disponíveis    | ❌    | ❌                      |
+| `GET`    | `/pets/mypets`       | Lista os pets do usuário logado    | ✅    | ❌                      |
+| `GET`    | `/pets/myadoptions`  | Lista as adoções do usuário logado | ✅    | ❌                      |
+| `GET`    | `/pets/:id`          | Busca um pet pelo ID               | ❌    | ❌                      |
+| `DELETE` | `/pets/:id`          | Remove um pet                      | ✅ 🔒 | ❌                      |
+| `PATCH`  | `/pets/:id`          | Atualiza dados de um pet           | ✅ 🔒 | 🖼️ `images` (múltiplas) |
+| `PATCH`  | `/pets/schedule/:id` | Agenda uma visita para adoção      | ✅    | ❌                      |
+| `PATCH`  | `/pets/conclude/:id` | Conclui a adoção do pet            | ✅    | ❌                      |
 
 > ✅ Requer token JWT no header: `Authorization: Bearer <token>`  
 > 🔒 Requer que o usuário autenticado seja o dono do pet
