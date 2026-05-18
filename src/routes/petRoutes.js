@@ -28,5 +28,6 @@ router.patch(
     petController.updatePet
 );
 router.patch('/schedule/:id', checkToken, petController.schedule);
+router.patch('/conclude/:id', checkToken, petController.concludeAdoption);
 
 export default router;
