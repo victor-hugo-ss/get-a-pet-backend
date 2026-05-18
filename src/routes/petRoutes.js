@@ -27,5 +27,6 @@ router.patch(
     uploadImage('pets').array('images'),
     petController.updatePet
 );
+router.patch('/schedule/:id', checkToken, petController.schedule);
 
 export default router;

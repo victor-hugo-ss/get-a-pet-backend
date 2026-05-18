@@ -138,7 +138,7 @@ As imagens são armazenadas localmente na pasta `public/images/`:
 - **Pets:** `public/images/pets/`
 - **Usuários:** `public/images/users/`
 
-Formatos aceitos: `jpg`, `jpeg`, `png`.
+Formatos aceitos: `jpg` e `png`.
 
 ---
 
